@@ -4,7 +4,5 @@ Django==4.2.6
 django_currentuser==0.7.0
 djangorestframework==3.15.1
 gunicorn==22.0.0
-PyJWT==2.8.0
-PyJWT==2.9.0
 uvicorn==0.30.3
 whitenoise==6.7.0
