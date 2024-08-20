@@ -1,0 +1,34 @@
+{% load static %}
+<style>
+  #disclaimer {
+    text-align: center;
+    font-size: 0.8em;
+  }
+</style>
+<header>
+  <img src="{% static 'img/logo.png' %}" />
+</header>
+<nav>
+  <ul>
+    <li><a href="{% url 'home' %}">-- Home</a></li>
+    <li><a href="{% url 'about' %}">-- About</a></li>
+    <li><a href="{% url 'menu' %}">-- Menu</a></li>
+    <li><a href="{% url 'book' %}">-- Book</a></li>
+    <li><a href="{% url 'reservations' %}">-- Reservations</a></li>
+    <!-- </ul> -->
+    <!-- <ul> -->
+      <!-- <br> -->
+      <hr>
+    <li><a href="/cart/">-- Home Delivery</a></li>
+    <!-- <li><a href="/order/">-- Current Orders</a></li> -->
+    <li><a href="{% url 'register' %}">-- Sign Up</a></li>
+    {% if user.is_authenticated %}
+      <li><a href="{% url 'logout-page' %}">-- Logout</a></li>
+    {% else %}
+      <li><a href="{% url 'login-page' %}">-- Login</a></li>
+    {% endif %}
+    <li><a href="{% url 'comments' %}">-- Comments</a></li>
+    <li><a href="{% url 'stafflogin' %}">-- Staff Login</a></li>
+  </ul>
+</nav>
+<p id="disclaimer">Disclaimer: This is a demo website based on some of the projects in the Meta Introduction to Backend Development Course, designed as a portfolio project. It is not a real restaurant.</p>

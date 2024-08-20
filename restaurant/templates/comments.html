@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+  h2 {
+    text-align: center;
+    font-size: 1.9em;
+    font-weight: normal;
+  }
+
+  #section2 {
+    margin: auto;
+    width: 50%;
+
+  }
+
+  #id_name {
+    width: 500px;
+    height: 50px;
+  }
+
+  #id_comment {
+    width: 500px;
+    height: 50px;
+  }
+
+  input {
+    margin: 0 auto;
+  }
+
+  #message {
+    text-align: center;
+  }
+
+</style>
+
+<section>
+<h2>We always welcome feedback. Please feel free to leave us any comments on your recent dining experience;
+  take-out experience; suggestions for our menu, or any other comments you wish to make.</h2>
+  </section>
+  <hr>
+    {% if messages %}
+    {% for message in messages %}
+      <p id="message">{{message}}</p>
+    {% endfor %}
+    {% endif %}
+  <hr>
+  <section id="section2">
+    <form action="/comments/" method="post">
+        {% csrf_token %}
+         {{form.as_p}}
+         <input type="submit" value="Submit">
+         <br>
+         <br>
+         <br>
+         <br>
+    </form>
+
+    <!-- <hr> -->
+
+  </section>
+{% endblock %}

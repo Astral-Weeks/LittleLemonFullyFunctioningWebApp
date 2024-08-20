@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<h1>Menu</h1>
+<!--Begin col-->
+<div class="column">
+    {% for item in cate.cate %}
+       <h2>{{ item.title }}</h2>
+       
+        {% for i in menu.menu %}
+        <p>
+
+            <a href="{% url 'menu_item' pk=item.pk %}">
+                {% if i.category.title == item.title %}
+                {{ i.title }}
+                </a>
+            <span class="menu-price">
+                ${{ i.price }}
+            </span>
+                {% endif %}
+        </p>
+            
+        {% endfor %}
+    {% endfor %}
+
+</div>
+
+<!-- <article>
+    <img src="{% static 'img/Grilled fish B.jpg' %}">
+</article> -->
+
+<!--End col-->
+{% endblock %}

@@ -1,0 +1,227 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+    .mainhr {
+        border-top: 5px solid darkred;
+    }
+
+    #messages {
+        color: red;
+        text-align: center
+    }
+
+    #addresswarning, #payment-info {
+        text-align: center;
+    }
+
+    #payment-info {
+        color: red;
+    }
+
+    #addressform {
+        margin: 0 auto;
+    }
+
+    #button-div {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    #PlaceOrderWords {
+        text-align: center;
+        margin: 0 auto;
+        width: 50%;
+    }
+
+    #form {
+        margin: auto;
+        width: 100%;
+        /* border: 2px solid pink; */
+    }
+
+    input {
+        width: 100%;
+        margin: auto;
+    }
+
+    /* .mb-3 {
+        border: 3px solid black;
+    } */
+
+    #PlaceOrderButton {
+        padding: 1% 1% 1% 1%;
+        background-color: darkolivegreen;
+        border-radius: 3% 3% 3% 3%;
+        border-color: black;
+        margin: 0 auto;
+        color: white;
+        font-size: 160%;
+        /* display: block; */
+        width: 100%;
+    }
+    #PlaceOrderButton:hover {
+        cursor: pointer;
+    }
+
+    #button-ready {
+        text-align: center;
+        font-size: 1.5em;
+    }
+
+    #order-section {
+        display: flex;
+        justify-content: space-evenly;
+        flex-wrap: wrap;
+        flex-direction: row;
+        border: 2px solid darkolivegreen;
+    }
+
+    .order-div {
+        border-right: 2px solid darkolivegreen;
+        padding-right: 2%;
+        padding-top: 6%;
+        /* padding: 1% 2% 1% 2%; */
+    }
+
+    #cart-div {
+        display: flex;
+        justify-content:stretch;
+        flex-wrap: wrap;
+        flex-direction: row;
+        border: 2px solid darkolivegreen;
+    }
+
+    .cart-items {
+        border-right: 2px solid darkolivegreen;
+        padding: 1% 2% 1% 2%;
+        /* height: 100%; */
+    }
+
+    .cart-total {
+        /* border: 2px solid pink; */
+        margin-top: 5%;
+        padding: 1% 2% 1% 2%;
+    }
+
+
+</style>
+
+<div>
+    {% if messages %}
+    {% for message in messages %}
+    <hr>
+      <p id="messages">{{message}}</p>
+      <hr>
+    {% endfor %}
+    {% endif %}
+</div>
+
+
+    {% if request.user.is_authenticated %}
+    <h2 id="OrderDetails">Hi {{ user.username }}, you have the following orders pending:</h2>
+    <br>
+<div id="order-section">
+        <!-- <p>Your Items</p> -->
+        {% for i in orderitems.orderitems %}
+        <div class="order-div">
+            <p>
+            <p><strong>Item:</strong> {{ i.menuitem }}</p>
+            <p><strong>Quantity:</strong> {{ i.quantity }}</p>
+            <p><strong>Price Per Item:</strong> {{ i.unit_price }}</p>
+            <p><strong>Total:</strong> {{ i.price }}</p>
+            <br>
+            </p>
+        </div>
+        {% endfor %}
+    <div class="order-total">
+        <p><strong>TOTAL:</strong></p>
+        <hr>
+        {% for i in order.order %}
+        <p>
+        <p class="order-t"><strong>Date:</strong> {{ i.date }}</p>
+        <p class="order-t"><strong>Ordered At:</strong> {{ i.timeoforder }}</p>
+        <p class="order-t"><strong>Address:</strong> {{ i.address_line_1 }}</p>
+        <p class="order-t"><strong>Address:</strong> {{ i.address_line_2 }}</p>
+        <p class="order-t"><strong>Address:</strong> {{ i.address_town }}</p>
+        <p class="order-t"><strong>Updated At:</strong> {{ i.item_updated_at }}</p>
+        <p class="order-t"><strong>Status:</strong> {{ i.delivery_status }}</p>
+        <p class="order-t"><strong>Total:</strong> {{ i.total }}</p>
+        </p>
+        {% endfor %}
+    </div>
+</div>
+<br>
+<hr>
+<hr>
+<br>
+<div id="section1">
+    <h2>Hi {{ user.username }}, the following items have been added to your cart:</h2>
+    <br>
+    <div id="cart-div">
+
+        {% for i in personalcart.personalcart %}
+        <div class="cart-items">
+            <p>
+            <p><strong>Item:</strong> {{ i.menuitem }}</p>
+            <p><strong>Quantity:</strong> {{ i.quantity }}</p>
+            <p><strong>Price Per Item:</strong> {{ i.unit_price }}</p>
+            <p><strong>Total:</strong> {{ i.price }}</p>
+            <a href="{% url 'remove_from_cart' i.id %}"><p>Remove</p></a>
+            </p>
+            </div>
+            <!-- <br> -->
+            {% endfor %}
+        <!-- </div> -->
+        <div class="cart-total">
+            <p><strong>Total:</strong> {{ total_price }}</p>
+        </div>
+    </div>
+    {% endif %}
+</div>
+<hr class="mainhr">
+<p id="payment-info">All orders must be paid by card or in cash upon delivery</p>
+<hr class="mainhr">
+
+<div id="button-div">
+        <p id="button-ready">Are you ready?</p>
+        <br>
+        <a id="PlaceOrderWords" href="{% url 'addressfordelivery'%}"><button id="PlaceOrderButton">Proceed to Add Address</button></a>
+</div>
+<br>
+<hr class="mainhr">
+
+<div id="section2">
+    <h2>Select From the Menu</h2>
+    <div class="column">
+        {% for item in cate.cate %}
+           <h2>{{ item.title }}</h2>
+           
+            {% for i in menu.menu %}
+            <p>
+                <!-- <input type="checkbox" name="items[]" class="form-check-input" value="{{ app.pk }}"> -->
+                <!-- <label class="form-check-label"> -->
+                <a href="{% url 'menu_item' pk=i.pk %}">
+                    {% if i.category.title == item.title %}
+                    {{ i.title }}
+                    </a>
+                <!-- </label> -->
+                <span class="menu-price">
+                    ${{ i.price }}
+                </span>
+                <!-- <a href="#" class="buy-now-button">Buy Now</a> -->
+                <a class="buy-now-button" href="{% url 'add_to_cart' i.id %}">Add to Cart</a>
+                    {% endif %}
+            </p>
+                
+            {% endfor %}
+        {% endfor %}
+        <!-- <img src="{% static 'img/head_chef.jpg' %}"> -->
+    </div>    
+</div>
+
+{% endblock %}
+

@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+  #form {
+    margin: auto;
+    width: 50%;
+  }
+
+  .mb-3 {
+    width: 50vw;
+    margin-left: 8%;
+  }
+
+  .mainhr {
+    border-top: 5px solid darkred;
+  }
+
+  #payment-info {
+    text-align: center;
+    color: red;
+  }
+
+  #PlaceOrderButton {
+        padding: 1% 1% 1% 1%;
+        background-color: darkolivegreen;
+        border-radius: 3% 3% 3% 3%;
+        border-color: black;
+        /* margin: 0 auto; */
+        /* margin-right: 20%; */
+        color: white;
+        font-size: 160%;
+        /* display: block; */
+        width: 100%;
+    }
+    #PlaceOrderButton:hover {
+        cursor: pointer;
+    }
+
+    #button-ready {
+        text-align: center;
+        font-size: 1.5em;
+    }
+</style>
+
+{% if request.user.is_authenticated %}
+<section id="form">
+  <form id="addressform" action="/order/" method="post">
+      {% csrf_token %}
+      <p class="mb-3" id="addresswarning"><strong>Please Add Your Address To Complete Your Order:</strong></p>
+      <div class="mb-3">
+          <label for="address_line_1" class="form-label">Address Line 1:</label>
+          <input type="text" class="form-control" name="address_line_1" aria-describedby="address_line_1_help" placeholder="e.g. Lane 3, Winchester Drive" required />
+        </div>
+      <div class="mb-3">
+          <label for="address_line_2" class="form-label">Address Line 2:</label>
+          <input type="text" class="form-control" name="address_line_2" aria-describedby="address_line_2_help" placeholder="e.g. Madison, 324" required />
+      </div>
+      <div class="mb-3">
+          <label for="address_town" class="form-label">Town/City: </label>
+          <input type="text" class="form-control" name="address_town" aria-describedby="address_town_help" placeholder="e.g. Chicago" required />
+      </div>
+      <div id="ready-div">
+      <p id="button-ready">Are you ready?</p>
+      <br>
+      <input id="PlaceOrderButton" type="submit" value="Place Your Order">
+      </div>
+  </form>
+
+</section>
+
+<hr class="mainhr">
+<p id="payment-info">All orders must be paid by card or in cash upon delivery</p>
+<hr class="mainhr">
+
+{% endif %}
+
+<section>
+    {% if messages %}
+      {% for message in messages %}
+        <p>{{message}}</p>
+      {% endfor %}
+    {% endif %}
+
+</section>
+
+{% endblock %}

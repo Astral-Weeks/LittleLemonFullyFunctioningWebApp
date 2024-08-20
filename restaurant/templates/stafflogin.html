@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+  h2 {
+    text-align: center;
+    font-size: 1.9em;
+    font-weight: normal;
+  }
+
+  #section2 {
+    margin: auto;
+    width: 50%;
+  }
+
+  .button-div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+  }
+
+  .buttons-div-single {
+    width: 100%;
+  }
+
+  button {
+    width: 100%;
+    padding-top: 5%;
+    padding-bottom: 5%;
+    font-size: 1.2em;
+  }
+
+  .order-divider-line {
+    border-top: 10px solid darkolivegreen;
+    width: 80vw;
+  }
+
+  #message {
+    text-align: center;
+  }
+
+</style>
+
+<script>
+  const inputElement = document.getElementById('beingprepared'); // Replace 'lname' with your input element's ID
+  inputElement.value = thisorder;
+</script>
+
+<section>
+    <h2>Chefs and delivery staff: please login to update the preparation status or delivery status of orders.</h2>
+</section>
+<h2 id="OrderDetails">Hi {{ user.username }}, you have the following orders to deliver:</h2>
+<section>
+  {% if request.user.is_authenticated %}
+
+  <br>
+
+  <div class="order-total">
+      {% for i in assigned_orders.assigned_orders %}
+      {% with thisorder=i.id %}
+
+      <p><strong>TOTAL:</strong></p>
+      <p>
+      <p class="order-t"><strong><em>Order For : {{ i.user }}</em></strong></p>
+      <p class="order-t"><strong>Date:</strong> {{ i.date }}</p>
+      <p class="order-t"><strong>Ordered At:</strong> {{ i.timeoforder }}</p>
+      <p class="order-t"><strong>Address:</strong> {{ i.address_line_1 }}</p>
+      <p class="order-t"><strong>Address:</strong> {{ i.address_line_2 }}</p>
+      <p class="order-t"><strong>Address:</strong> {{ i.address_town }}</p>
+      <p class="order-t"><strong>Updated at:</strong> {{ i.item_updated_at }}</p>
+      <p class="order-t"><strong>Status:</strong> {{ i.delivery_status }}</p>
+      <p class="order-t"><strong>Total:</strong> {{ i.total }}</p>
+      </p>
+      <br>
+      <hr>
+      <!-- {% if orderitems.order == order %}
+      <p>Test</p>
+      <p>{{ orderitems.user }}</p>
+      {% endif %}
+      <br> -->
+      {% for item in orderitems.orderitems %}
+        {% if item.order == i %}
+        <div class="order-div">
+          <p>
+          <p><strong>Item:</strong> {{ item.menuitem }}</p>
+          <p><strong>Quantity:</strong> {{ item.quantity }}</p>
+          <p><strong>Price Per Item:</strong> {{ item.unit_price }}</p>
+          <p><strong>Total:</strong> {{ item.price }}</p>
+          </p>
+          <br>
+      </div>
+        {% endif %}
+      {% endfor %}
+      <hr>
+      <div class="button-div">
+        {% csrf_token %}
+        <div class="buttons-div-single">
+        <form action="/updateorderstatus/" method="GET">
+          <!-- <input type="number" value=thisorder class="form-control" name="beingprepared" /> -->
+          <button class="delivery-btn" value="{{ thisorder }}" name="beingprepared" type="submit">Chefs:<br>Being Prepared</button></form>
+        </div>
+        <div class="buttons-div-single">
+        <form action="/updateorderstatus/" method="GET">
+          <button name="onitsway" value="{{ thisorder }}" class="delivery-btn" type="submit">Delivery Crew:<br>On its way</button></form>
+        </div>
+        <div class="buttons-div-single">
+        <form action="/updateorderstatus/" method="GET">
+          <button name="delivered" value="{{ thisorder }}" class="delivery-btn" type="submit">Delivery Crew:<br>Delivered Successfully</button></form>
+        </div>
+      </div>
+      <hr class="order-divider-line">
+      <hr class="order-divider-line">
+      {% endwith %}
+      {% endfor %}
+  </div>
+</div>
+
+  <!-- {% for item in assigned_orders.assigned_orders %}
+      {{ item.user }}
+    {% endfor %}
+  {% endif %} -->
+
+
+  <!-- {% for i in orderitems.orderitems %}
+  <p>
+  <h3>Item: {{ i.menuitem }}</h3>
+  <h3>Quantity: {{ i.quantity }}</h3>
+  <h3>Price Per Item: {{ i.unit_price }}</h3>
+  <h3>Total: {{ i.price }}</h3>
+  <br>
+  </p>
+  {% endfor %} -->
+</section>
+  <hr>
+    {% if messages %}
+    {% for message in messages %}
+      <p id="message">{{message}}</p>
+    {% endfor %}
+    {% endif %}
+  <hr>
+  <section id="section2">
+
+    <section>
+      {% for j in item.item %}
+      {{ j.id }}
+      {% endfor %}
+    </section>
+
+  </section>
+
+{% endblock %}

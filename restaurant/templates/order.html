@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+    #message {
+        text-align: center;
+  }
+
+</style>
+
+<h1>Your Order Has Been Sent!</h1>
+<!--Begin col-->
+<!-- <hr>
+{% if messages %}
+{% for message in messages %}
+  <p id="message">{{message}}</p>
+{% endfor %}
+{% endif %}
+<hr> -->
+  <!-- <form action="/order/" method="patch">
+        {% csrf_token %}
+        <h1>Please Add Your Address To Complete Your Order:</h1>
+          <div class="mb-3">
+            <label for="address_line_1" class="form-label">Address Line 1:</label>
+            <input type="text" class="form-control" name="address_line_1" aria-describedby="address_line_1_help" placeholder="e.g. Lane 3, Winchester Drive">
+          </div>
+          <div class="mb-3">
+            <label for="address_line_2" class="form-label">Address Line 2:</label>
+            <input type="text" class="form-control" name="address_line_2" aria-describedby="address_line_2_help" placeholder="e.g. Madison, 324">
+          </div>
+          <div class="mb-3">
+            <label for="address_town" class="form-label">Password</label>
+            <input type="text" class="form-control" name="address_town" placeholder="e.g. Chicago">
+          </div>
+          
+         <input type="submit" value="Submit">
+    </form> -->
+
+
+<div class="column">
+    <p>Your Items</p>
+    {% for i in orderitems.orderitems %}
+    <p>
+    <h3>Item: {{ i.menuitem }}</h3>
+    <h3>Quantity: {{ i.quantity }}</h3>
+    <h3>Price Per Item: {{ i.unit_price }}</h3>
+    <h3>Total: {{ i.price }}</h3>
+    <br>
+    </p>
+    {% endfor %}
+    <br>
+    <h3>Total:</h3>
+    <hr>
+    {% for i in order.order %}
+    <p>
+    <h3>Date: {{ i.date }}</h3>
+    <h3>Status: {{ i.delivery_status }}</h3>
+    <h3>Total: {{ i.total }}</h3>
+    </p>
+    {% endfor %}
+</div>
+<!--End col-->
+{% endblock %}
