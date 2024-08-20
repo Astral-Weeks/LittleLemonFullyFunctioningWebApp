@@ -3,6 +3,7 @@ dj_database_url==2.2.0
 Django==4.2.6
 django_currentuser==0.7.0
 djangorestframework==3.15.1
+djoser==2.2.3
 gunicorn==22.0.0
 uvicorn==0.30.3
 whitenoise==6.7.0
