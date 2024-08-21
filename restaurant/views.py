@@ -358,7 +358,8 @@ def add_to_order(request):
     try:
         cart = Cart.objects.filter(user=request.user)
         if cart.exists():
-            manager1 = User.objects.get(id=1)
+            # the default delivery crew member is one of the staff accounts set-up before production
+            defaultdeliverystaff = User.objects.get(id=2)
             context = {'personalcart': cart}
             date = datetime.datetime.today()
             total_price = 0
@@ -371,7 +372,7 @@ def add_to_order(request):
             # delivery_crew can be assigned manually in the admin portal, according to which staff might be
             # closest to the restaurant, as opposed to being without a current delivery
 
-            order = Order.objects.create(user=obj.user, delivery_crew=manager1, status=False, total=total_price, date=date, address_line_1=address_line_1, address_line_2=address_line_2, address_town=address_town)
+            order = Order.objects.create(user=obj.user, delivery_crew=defaultdeliverystaff, status=False, total=total_price, date=date, address_line_1=address_line_1, address_line_2=address_line_2, address_town=address_town)
             order.save()
             for item in cart:
                 i = OrderItem.objects.create(order=order, menuitem=item.menuitem, quantity=item.quantity, unit_price=item.unit_price, price=item.price)
