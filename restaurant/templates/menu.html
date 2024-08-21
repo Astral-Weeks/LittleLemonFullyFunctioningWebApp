@@ -10,7 +10,7 @@
         {% for i in menu.menu %}
         <p>
 
-            <a href="{% url 'menu_item' pk=item.pk %}">
+            <a href="{% url 'menu_item' pk=i.pk %}">
                 {% if i.category.title == item.title %}
                 {{ i.title }}
                 </a>

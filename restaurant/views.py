@@ -40,20 +40,10 @@ class reservations(TemplateView):
     authentication_classes = [IsAuthenticated]
     template_name = 'bookings.html'
 
-        #  cart = Cart.objects.filter(user=self.request.user)
-        #     context = {'personalcart': cart}
-        #     menu_data = MenuItem.objects.all()
-        #     cat_data = Categories.objects.all()
-        #     m_data = {"cate": cat_data}
-        #     main_data = {"menu": menu_data}
-        #     return render(request, 'cart.html', {'personalcart': context, "menu": main_data, "cate": m_data)
-
     def get(self, request, *args, **kwargs):
         if self.request.user.is_authenticated:
-            # date = request.GET.get('date',datetime.date.today())
             bookingstobeshown = Booking.objects.filter(user=self.request.user)
             b = {'bookings': bookingstobeshown}
-            # booking_json = serializers.serialize('json', bookings)
             return render(request, 'bookings.html', {'bookings': b})
         else:
             messages.error(request, 'Please login first to see any reservations you have made')
@@ -83,64 +73,6 @@ def book(request):
         return render(request, "book.html", context)
 
 
-# class book(TemplateView):
-#     permission_classes = [IsAuthenticated]
-#     template_name = 'book.html'
-#     form = BookingForm()
-
-# #     def post(self, request, *args, **kwargs):
-# #         if self.request.user.is_authenticated:
-# #             if request.method == 'POST':
-# #                 context = {}
-# #                 context['form'] = BookingForm()
-# #                 a = Booking()
-# #                 form = BookingForm(request.POST, instance=a)
-# #                 if form.is_valid():
-# #                     form.save(commit=False)
-# #                     form.user = request.user
-# #                     form.save()
-# #                     context = {'form': form}
-# #             return render(request, 'book.html', context)
-# #         else:
-# #             messages.error(request, 'Please login first to see your cart.')
-# #             return redirect('book')
-
-#     def post(self, request, *args, **kwargs):
-#         if self.request.user.is_authenticated:
-#             # x = Booking.objects.get_or_create(user=self.request.user)
-#             if request.method == 'POST':
-#                 # form = BookingForm(data=self.request.POST, commit=False)
-#                 # x = Booking.objects.get_or_create(user=self.request.user, first_name=form.first_name, )
-#                 data = self.request.POST
-#                 # x.first_name = 
-#                 # form.user = self.request.user
-#                 # thebooking, created = Booking.objects.get_or_create(user=2, first_name=data.first_name, reservation_date=data.reservation_date, reservation_slot=data.reservation_slot, commit=False)
-#                 # thebooking.save()
-#                 # thebooking.first_name = "Lucy"
-#                 # thebooking.save()
-#                 # context = {'thebooking': thebooking}
-#             return redirect('book')
-#         else:
-#             messages.error(request, 'Please login first to see your cart.')
-#             return redirect('book')
-
-
-# class register(FormView):
-#     form_class = SignUpForm
-#     template_name = "register.html"
-#     success_url = 'login-page'
-#     success_message = "You have signed up!"
-
-#     def form_valid(self, form):
-#             response = super().form_valid(form)
-#             success_message = self.get_success_message(form.cleaned_data)
-#             if success_message:
-#                 messages.success(self.request, success_message)
-#             return response
-
-#     def get_success_message(self, cleaned_data):
-#         return self.success_message % cleaned_data
-
 
 
 class register(FormView):
@@ -160,12 +92,7 @@ def checkusername(request):
     else:
         return HttpResponse("<div style='color: green;'>This username is available</div>")
 
-# def register2(request):
-#     username = request.POST.get('username')
-#     if get_user_model().objects.filter(username=username).exists():
-#         return HttpResponse('<div style="color: red"> This username already exists</div>')
-#     else:
-#         return HttpResponse('<div style="color: green"> This username is available</div>')
+
 
 def signup(request):
     signupcontext = {}
@@ -248,28 +175,7 @@ def logout_user(request):
     messages.success(request, ("You are logged out"))
     return redirect('home')
 
-
-# class-based
-
-# class UsersView(generics.ListCreateAPIView):
-#     queryset = User.objects.all()
-#     serializer_class = UserSerializer
-#     permission_classes = [IsManager]
-#     throttle_classes = [AnonRateThrottle, UserRateThrottle]
-
-
-
-# class UsersView(viewsets.ModelViewSet):
-#     queryset = User.objects.all()
-#     serializer_class = UserSerializer
-
-#     def get_permissions(self):
-#         if self.request.method != 'POST':
-#             permission_classes = [IsManager]
-#         else:
-#             permission_classes = []
-#         return [permission() for permission in permission_classes]
-    
+   
 
 
 # CATEGORIES ///////////////////////////////////////////////////////////////
@@ -299,38 +205,6 @@ class ViewByCategoryView(generics.RetrieveUpdateDestroyAPIView):
         else:
             permission_classes = [IsManager | IsAdminUser]
         return [permission() for permission in permission_classes]
-
-
-
-# MENU ITEMS ///////////////////////////////////////////////////////////////
-
-# class MenuItemsView(generics.ListCreateAPIView):
-#     queryset = MenuItem.objects.all()
-#     throttle_classes = [AnonRateThrottle, UserRateThrottle]
-#     search_fields = ['title', 'category__title']
-#     ordering_fields = ['price', 'category']
-#     serializer_class = MenuItemSerializer
-#     pagination_class = MenuItemPagination
-
-#     def get_permissions(self):
-#         if self.request.method == 'GET':
-#             permission_classes = []
-#         else:
-#             permission_classes = [IsManager]
-#         return [permission() for permission in permission_classes]
-
-
-# class IndividualMenuItemView(generics.RetrieveUpdateDestroyAPIView):
-#     queryset = MenuItem.objects.all()
-#     serializer_class = MenuItemSerializer
-#     throttle_classes = [AnonRateThrottle, UserRateThrottle]
-
-#     def get_permissions(self):
-#         if self.request.method == 'GET':
-#             permission_classes = []
-#         else:
-#             permission_classes = [IsManager]
-#         return [permission() for permission in permission_classes]
 
 
 
@@ -371,7 +245,7 @@ class CartView(TemplateView):
             messages.error(request, 'Please login first to see your cart.')
             return redirect('login-page')
         
-    # @api_view(['POST'])
+    # UNUSED
     def post(self, request, **kwargs):
         serialized_item = AddItemToCartSerializer(data=request.data)
         serialized_item.is_valid(raise_exception=True)
@@ -401,7 +275,6 @@ class CartView(TemplateView):
 
 def add_to_cart(request, id):
     product = MenuItem.objects.get(id=id)
-    # product.save()
     item, created = Cart.objects.get_or_create(menuitem=product, user=request.user)
     item.quantity += 1
     item.unit_price = product.price
@@ -414,13 +287,6 @@ def remove_from_cart(request, id):
     cart_item.delete()
     return redirect('cart')
 
-# USERS ///////////////////////////////////////////////////////////////
-
-# class UsersView(generics.ListCreateAPIView):
-#     queryset = User.objects.all()
-#     serializer_class = UserSerializer
-#     permission_classes = [IsManager]
-#     throttle_classes = [AnonRateThrottle, UserRateThrottle]
 
 
 # DELIVERY PERSONNEL ///////////////////////////////////////////////////////////////
@@ -487,124 +353,6 @@ class AllManagersView(generics.ListCreateAPIView):
 
 
 # ORDERS ///////////////////////////////////////////////////////////////
-
-# class OrderView(generics.ListCreateAPIView):
-#     serializer_class = OrderSerializer
-#     throttle_classes = [AnonRateThrottle, UserRateThrottle]
-
-#     def get_queryset(self):
-#         if self.request.user.groups.filter(name='DeliveryPersonnel').exists():
-#             queryset = Order.objects.filter(delivery_crew=self.request.user)
-#         elif self.request.user.groups.filter(name='Managers').exists():
-#             queryset = Order.objects.all()
-#         else:
-#             queryset = Order.objects.filter(user=self.request.user)
-#         return queryset
-
-#     def get_permissions(self):
-#         if self.request.method == 'GET': 
-#             permission_classes = [IsAuthenticated]
-#         elif self.request.method == 'POST':
-#             permission_classes = [IsAuthenticated]
-#         else:
-#             permission_classes = [IsManager | IsAdminUser]
-#         return [permission() for permission in permission_classes]
-
-#     def post(self, request, **kwargs):
-#         cart = Cart.objects.filter(user=request.user)
-#         allitemsincart = cart.values_list()
-#         if len(allitemsincart) == 0:
-#             return JsonResponse(status=400, data={'Error': 'Bad Request. There appear to be no items in your cart. Please ensure the cart has items before placing an order'})
-#         elif len(allitemsincart) > 0:
-#             total = float(0)
-#             for i in allitemsincart:
-#                 individ_itemprice = float(i[-1])
-#                 total += individ_itemprice
-#             order = Order.objects.create(user=request.user, status=False, total=total, date=date.today())
-#             order_id = str(order.id)
-#             for i in cart.values():
-#                 menuitem = get_object_or_404(MenuItem, id=i['menuitem_id'])
-#                 orderitem = OrderItem.objects.create(order=order, menuitem=menuitem, quantity=i['quantity'], unit_price=i['unit_price'], price=i['price'])
-#                 orderitem.save()
-#                 data = OrderSerializer(orderitem, many=True).data
-#                 Cart.objects.filter(user=request.user).delete()
-#                 return JsonResponse(data, safe=False)
-                # return redirect('home')
-                # return render(request, 'order')
-                # return JsonResponse(status=201, data={'Update':'Your order has been received successfully. Your order number is #' + order_id})
-
-# class OrderView(TemplateView):
-#     queryset = Order.objects.all()
-#     serializer_class = OrderSerializer
-#     permission_classes = [IsAuthenticated]
-#     throttle_classes = [AnonRateThrottle, UserRateThrottle]
-#     template_name = 'cart.html'
-    
-#     def get(self, request, *args, **kwargs):
-#         if self.request.user.is_authenticated:
-#             if Order.objects.filter(user=request.user).exists():
-#                 order_data = Order.objects.filter(user=request.user)
-#                 for item in order_data:
-#                     orderitems = OrderItem.objects.filter(order=item)
-#                     oi_data = {"orderitems": orderitems}
-#                     main_data = {"order": order_data}
-#                     return render(request, 'order.html', {"item": item, "order": main_data, "orderitems": oi_data})
-#             else:
-#                 if Cart.objects.filter(user=request.user).exists() is False:
-#                     return render(request, 'order.html')
-#                 else:
-#                     messages.info(request, "You haven't submitted any orders yet. Please add to your cart and submit an order first.")
-#                     return redirect('cart')
-#         else:
-#             messages.error(request, "Please login first to see any orders that you have placed.")
-#             return redirect('login-page')
-        
-#     def post(request):
-#         if request.method == 'POST':
-#             cart = Cart.objects.filter(user=request.user)
-#             if cart.exists():
-#                 manager1 = User.objects.get(id=1)
-#                 context = {'personalcart': cart}
-#                 date = datetime.datetime.today()
-#                 total_price = 0
-#                 for obj in cart:
-#                     total_price += obj.price
-#                 order = Order.objects.create(user=obj.user, delivery_crew=manager1, status=False, total=total_price, date=date)
-#                 order.save()
-#                 for item in cart:
-#                     i = OrderItem.objects.create(order=order, menuitem=item.menuitem, quantity=item.quantity, unit_price=item.unit_price, price=item.price)
-#                     i.save()
-#         # product.save()
-#                 Cart.objects.filter(user=request.user).delete()
-#                 order_data = Order.objects.filter(user=request.user)
-#                 for item in order_data:
-#                     orderitems = OrderItem.objects.filter(order=item)
-#                 oi_data = {"orderitems": orderitems}
-#                 main_data = {"order": order_data}
-#                 return render(request, 'order.html', {'personalcart': context, "item": item, "i": i, "total_price": total_price, "order": main_data, "orderitems": oi_data})
-#             else:
-#                 order_data = Order.objects.filter(user=request.user)
-#                 for item in order_data:
-#                     orderitems = OrderItem.objects.filter(order=item)
-#                 oi_data = {"orderitems": orderitems}
-#                 main_data = {"order": order_data}
-#                 return render(request, 'order.html', {"order": main_data, "orderitems": oi_data})
-#         # return render(request, 'order.html')
-
-
-# class OrderView(TemplateView):
-#     queryset = Order.objects.all()
-#     serializer_class = OrderSerializer
-#     permission_classes = [IsAuthenticated]
-#     throttle_classes = [AnonRateThrottle, UserRateThrottle]
-#     template_name = 'order.html'
-
-#     def get(self, request, *args, **kwargs):
-#         if self.request.user is None:
-#             return redirect('login')
-
-
-
 
 def add_to_order(request):
     try:
@@ -681,29 +429,7 @@ class stafflogin(TemplateView):
         else:
             messages.info(request, "You are unauthorized. Only staff can login to the staff page.")
             return redirect('login-page')
-    # else:
-    #     messages.info(request, "Only staff can login to the staff page. You are not authorized.")
-    #     return redirect('login-page')
-        
-    # def post(request):
-    #     try:
-    #         x = request.POST.get('thisorder')
-    #         print(x)
-    #         j, created = Order.objects.get_or_create(id=x.id)
-    #         j.address_line_1 = "ewfbkjhbfwhjbfhjwe"
-    #         j.save()
-    #         return render(request, 'stafflogin.html', {'j': j})
-    #     except:
-    #         return render(request, 'stafflogin.html')
 
-        # if request.GET.get('beingprepared'):
-        #     x = request.GET['thisorder']
-        #     x.delivery_status = "Updated"
-        #     x.save()
-        #     j = Order.objects.filter(id=x)
-        #     j.delivery_status = "Updated"
-        #     j.save()
-        #     return render(request, 'stafflogin.html')
 
 def currenttime():
     return datetime.datetime.now()
@@ -734,105 +460,7 @@ def updateorderstatus(request):
             item.save()
             return render(request, 'stafflogin.html', {'item': item})
 
-# def add_to_order(request):
-#     try:
-#         cart = Cart.objects.filter(user=request.user)
-#         if cart.exists():
-#             manager1 = User.objects.get(id=1)
-#             context = {'personalcart': cart}
-#             date = datetime.datetime.today()
-#             total_price = 0
-#             for obj in cart:
-#                 total_price += obj.price
-#             address_line_1 = request.POST.get('address_line_1')
-#             address_line_2 = request.POST.get('address_line_2')
-#             address_town = request.POST.get('address_town')
-#             order = Order.objects.create(user=obj.user, delivery_crew=manager1, status=False, total=total_price, date=date, address_line_1=address_line_1, address_line_2=address_line_2, address_town=address_town)
-#             order.save()
-#             for item in cart:
-#                 i = OrderItem.objects.create(order=order, menuitem=item.menuitem, quantity=item.quantity, unit_price=item.unit_price, price=item.price)
-#                 i.save()
-#         # product.save()
-#             Cart.objects.filter(user=request.user).delete()
-#             order_data = Order.objects.filter(user=request.user)
-#             for item in order_data:
-#                 orderitems = OrderItem.objects.filter(order=item)
-#             oi_data = {"orderitems": orderitems}
-#             main_data = {"order": order_data}
-#             messages.success(request, "Your order has been sent!")
-#             return render(request, 'order.html', {'personalcart': context, "item": item, "i": i, "total_price": total_price, "order": main_data, "orderitems": oi_data})
-#         else:
-#             order_data = Order.objects.filter(user=request.user)
-#             for item in order_data:
-#                 orderitems = OrderItem.objects.filter(order=item)
-#             oi_data = {"orderitems": orderitems}
-#             main_data = {"order": order_data}
-#             return render(request, 'order.html', {"order": main_data, "orderitems": oi_data})
-#     except:
-#         messages.info(request, "You don't currently have any orders pending, nor any items in your cart.")
-#         messages.info(request, "Feel free to add items to your cart, and place an order when you are ready.")
-#         messages.info(request, "With care, your LittleLemon team.")
-#         return redirect('cart')
 
-
-
-
-
-
-# def addaddresstoorder(request):
-#     if request.method == 'PUT':
-#         data = request.POST
-#         order = Order.objects.get(user=CurrentUserField())
-#         order.address_line_1 = request.POST.get('address_line_1')
-#         order.address_line_2 = request.POST.get('address_line_2')
-#         order.address_town = request.POST.get('address_town')
-#         order.save()
-#         messages.success('your address has been added')
-#         return redirect('order')
-
-# def add_to_order(request):
-#     cart = Cart.objects.filter(user=request.user)
-#     if cart.exists():
-#         manager1 = User.objects.get(id=1)
-#         context = {'personalcart': cart}
-#         date = datetime.datetime.today()
-#         total_price = 0
-#         for obj in cart:
-#             total_price += obj.price
-#         order = Order.objects.create(user=obj.user, delivery_crew=manager1, status=False, total=total_price, date=date)
-#         order.save()
-#         for item in cart:
-#             i = OrderItem.objects.create(order=order, menuitem=item.menuitem, quantity=item.quantity, unit_price=item.unit_price, price=item.price)
-#             i.save()
-#         # product.save()
-#         Cart.objects.filter(user=request.user).delete()
-#         order_data = Order.objects.filter(user=request.user)
-#         for item in order_data:
-#             orderitems = OrderItem.objects.filter(order=item)
-#         oi_data = {"orderitems": orderitems}
-#         main_data = {"order": order_data}
-#         return render(request, 'order.html', {'personalcart': context, "item": item, "i": i, "total_price": total_price, "order": main_data, "orderitems": oi_data})
-#     else:
-#         order_data = Order.objects.filter(user=request.user)
-#         if order_data.exists():
-#             for item in order_data:
-#                 orderitems = OrderItem.objects.filter(order=item)
-#                 oi_data = {"orderitems": orderitems}
-#                 main_data = {"order": order_data}
-#                 return render(request, 'order.html', {"order": main_data, "orderitems": oi_data})
-
-
-
-
-
-
-# def vieworder(request):
-#     order_data = Order.objects.filter(user=request.user)
-#     for item in order_data:
-#         orderitems = OrderItem.objects.filter(order=item)
-#         oi_data = {"orderitems": orderitems}
-#         main_data = {"order": order_data}
-#         return render(request, 'order.html', {"order": main_data, "orderitems": oi_data})
 
 class IndividualOrderView(generics.ListCreateAPIView):
     serializer_class = IndividualOrderSerializer
@@ -901,7 +529,6 @@ def CommentView(request):
     context['form'] = CommentForm()
     a = Comments()
     f = CommentForm(request.POST, instance=a)
-    # messages.info(request, 'Please fill out the form, and we will read your message in due course.')
     if request.method == 'POST':
         if f.is_valid():
             f.save()
@@ -911,22 +538,3 @@ def CommentView(request):
 
     return render(request, "comments.html", context)
 
-# class CommentView(View):
-#     form_class = CommentForm
-
-#     def get(self, request):
-#         form = self.form_class()
-#         return render(request)
-    
-#     def data_inputted(self, form):
-#         data = {
-#             'name': form.cleaned_data.get('name'),
-#             'comment': form.cleaned_data.get('comment'),
-#         }
-#         return data
-    
-#     def post(self, request):
-#         form = self.form_class(request.POST)
-#         if form.is_valid():
-#             data = self.data_inputted(form)
-#         return render(request, "comments.html", context)
